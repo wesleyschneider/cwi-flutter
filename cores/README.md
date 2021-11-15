@@ -1,6 +1,6 @@
-# exercicio1
+# exercicio_1
 
-A new Flutter project.
+A new Flutter application.
 
 ## Getting Started
 
