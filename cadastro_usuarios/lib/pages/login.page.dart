@@ -19,6 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final FocusNode _passwordFocus = FocusNode();
+
   _login() {
     dev.log('email: ' + _emailController.text, name: runtimeType.toString());
     dev.log('password: ' + _passwordController.text,
@@ -28,73 +30,70 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.grey,
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TitlePageWidget(label: 'Login'),
-                  SizedBox(height: 48),
-                  TextInputFormWidget(
-                    label: 'Email Address',
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Required field';
-                      }
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TitlePageWidget(label: 'Login'),
+                SizedBox(height: 48),
+                TextInputFormWidget(
+                  label: 'Email Address',
+                  controller: _emailController,
+                  onFieldSubmitted: (_) {
+                    _passwordFocus.requestFocus();
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return 'Required field';
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextInputFormWidget(
+                  label: 'Password',
+                  itsPassword: true,
+                  controller: _passwordController,
+                  focusNode: _passwordFocus,
+                  validator: (text) {
+                    if (text == null || text.length < 3) {
+                      return 'Invalid password';
+                    }
+                  },
+                ),
+                SizedBox(height: 15),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        RegisterPage.route,
+                        arguments: RegisterPageArguments(
+                          initialEmail: _emailController.text,
+                        ),
+                      );
                     },
+                    child: Text("Don't have an account?"),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextInputFormWidget(
-                    label: 'Password',
-                    itsPassword: true,
-                    controller: _passwordController,
-                    validator: (text) {
-                      if (text == null || text.length < 3) {
-                        return 'Invalid password';
-                      }
-                    },
-                  ),
-                  SizedBox(height: 15),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          RegisterPage.route,
-                          arguments: RegisterPageArguments(
-                            initialEmail: _emailController.text,
-                          ),
-                        );
-                      },
-                      child: Text("Don't have an account?"),
-                    ),
-                  ),
-                  SizedBox(height: 34),
-                  ButtonWidget(
-                    onTap: () {
-                      bool isValid = _formKey.currentState?.validate() ?? false;
+                ),
+                SizedBox(height: 34),
+                ButtonWidget(
+                  onTap: () {
+                    bool isValid = _formKey.currentState?.validate() ?? false;
 
-                      if (isValid) _login();
-                    },
-                    title: 'Continue',
-                  )
-                ],
-              ),
+                    if (isValid) _login();
+                  },
+                  title: 'Continue',
+                )
+              ],
             ),
           ),
         ),

@@ -35,6 +35,10 @@ class VerifyCodePage extends StatelessWidget {
   final TextEditingController _thirdController = TextEditingController();
   final TextEditingController _fourthController = TextEditingController();
 
+  final FocusNode _secondeFocus = FocusNode();
+  final FocusNode _thirdFocus = FocusNode();
+  final FocusNode _fourthFocus = FocusNode();
+
   VerifyCodePage({Key? key, required this.args}) : super(key: key);
 
   _submit() {
@@ -62,96 +66,101 @@ class VerifyCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.grey,
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TitlePageWidget(label: 'Verification'),
-                  SizedBox(height: 7),
-                  Text(
-                    'a four digit verification code has been sent to your mobile number',
-                    style: TextStyle(fontSize: 17, color: Colors.black),
-                  ),
-                  SizedBox(height: 40),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 45,
-                        child: TextInputFormWidget(
-                          maxLength: 1,
-                          textAlign: TextAlign.center,
-                          controller: _firstController,
-                          validator: (text) => _validateField(text),
-                        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TitlePageWidget(label: 'Verification'),
+                SizedBox(height: 7),
+                Text(
+                  'a four digit verification code has been sent to your mobile number',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                SizedBox(height: 40),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 45,
+                      child: TextInputFormWidget(
+                        maxLength: 1,
+                        textAlign: TextAlign.center,
+                        controller: _firstController,
+                        validator: (text) => _validateField(text),
+                        onFieldSubmitted: (_) {
+                          _secondeFocus.requestFocus();
+                        },
                       ),
-                      SizedBox(
-                        width: 11,
-                      ),
-                      SizedBox(
-                        width: 45,
-                        child: TextInputFormWidget(
-                          maxLength: 1,
-                          textAlign: TextAlign.center,
-                          controller: _secondController,
-                          validator: (text) => _validateField(text),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 11,
-                      ),
-                      SizedBox(
-                        width: 45,
-                        child: TextInputFormWidget(
-                          maxLength: 1,
-                          textAlign: TextAlign.center,
-                          controller: _thirdController,
-                          validator: (text) => _validateField(text),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 11,
-                      ),
-                      SizedBox(
-                        width: 45,
-                        child: TextInputFormWidget(
-                          maxLength: 1,
-                          textAlign: TextAlign.center,
-                          controller: _fourthController,
-                          validator: (text) => _validateField(text),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 93),
-                  ButtonWidget(
-                    onTap: () {
-                      bool isValid = _formKey.currentState?.validate() ?? false;
-
-                      if (isValid) _submit();
-                    },
-                    title: 'Verify',
-                  ),
-                  SizedBox(height: 30),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text("Resend"),
                     ),
-                  )
-                ],
-              ),
+                    SizedBox(
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 45,
+                      child: TextInputFormWidget(
+                        maxLength: 1,
+                        textAlign: TextAlign.center,
+                        focusNode: _secondeFocus,
+                        controller: _secondController,
+                        validator: (text) => _validateField(text),
+                        onFieldSubmitted: (_) {
+                          _thirdFocus.requestFocus();
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 45,
+                      child: TextInputFormWidget(
+                        maxLength: 1,
+                        textAlign: TextAlign.center,
+                        focusNode: _thirdFocus,
+                        controller: _thirdController,
+                        validator: (text) => _validateField(text),
+                        onFieldSubmitted: (_) {
+                          _fourthFocus.requestFocus();
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 45,
+                      child: TextInputFormWidget(
+                        maxLength: 1,
+                        textAlign: TextAlign.center,
+                        focusNode: _fourthFocus,
+                        controller: _fourthController,
+                        validator: (text) => _validateField(text),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 93),
+                ButtonWidget(
+                  onTap: () {
+                    bool isValid = _formKey.currentState?.validate() ?? false;
+
+                    if (isValid) _submit();
+                  },
+                  title: 'Verify',
+                ),
+                SizedBox(height: 30),
+                Center(
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text("Resend"),
+                  ),
+                )
+              ],
             ),
           ),
         ),

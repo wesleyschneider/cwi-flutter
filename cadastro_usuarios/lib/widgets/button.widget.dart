@@ -12,22 +12,17 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15),
-        width: MediaQuery.of(context).size.width,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(2),
-        ),
+    return SizedBox(
+      height: 50,
+      width: MediaQuery.of(context).size.width,
+      child: ElevatedButton(
+        onPressed: () => onTap(),
         child: Text(
           title,
           style: TextStyle(
             fontSize: 16,
             fontStyle: FontStyle.italic,
-            color: Colors.white,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ),

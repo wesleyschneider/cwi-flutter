@@ -27,11 +27,21 @@ class RegisterPage extends StatelessWidget {
       TextEditingController();
   final TextEditingController _referalCodeController = TextEditingController();
 
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _mobileFocus = FocusNode();
+  final FocusNode _countryFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _passwordConfirmationFocus = FocusNode();
+  final FocusNode _referalCodeFocus = FocusNode();
+
   List<Widget> buildInputsForm() {
     return [
       TextInputFormWidget(
         label: 'Full name',
         controller: _nameController,
+        onFieldSubmitted: (_) {
+          _emailFocus.requestFocus();
+        },
         validator: (text) {
           if (text == null || text.isEmpty) {
             return 'Required field';
@@ -45,6 +55,10 @@ class RegisterPage extends StatelessWidget {
         label: 'Email Address',
         initialValue: args.initialEmail,
         controller: _emailController,
+        focusNode: _emailFocus,
+        onFieldSubmitted: (_) {
+          _mobileFocus.requestFocus();
+        },
         keyboardType: TextInputType.emailAddress,
         validator: (text) {
           if (text == null || text.isEmpty) {
@@ -58,6 +72,10 @@ class RegisterPage extends StatelessWidget {
       TextInputFormWidget(
         label: 'Mobile Number',
         controller: _mobileController,
+        focusNode: _mobileFocus,
+        onFieldSubmitted: (_) {
+          _countryFocus.requestFocus();
+        },
         keyboardType: TextInputType.phone,
         validator: (text) {
           if (text == null || text.isEmpty) {
@@ -71,6 +89,10 @@ class RegisterPage extends StatelessWidget {
       TextInputFormWidget(
         label: 'Country',
         controller: _countryController,
+        focusNode: _countryFocus,
+        onFieldSubmitted: (_) {
+          _passwordFocus.requestFocus();
+        },
         validator: (text) {
           if (text == null || text.isEmpty) {
             return 'Required field';
@@ -84,6 +106,10 @@ class RegisterPage extends StatelessWidget {
         label: 'Password',
         itsPassword: true,
         controller: _passwordController,
+        focusNode: _passwordFocus,
+        onFieldSubmitted: (_) {
+          _passwordConfirmationFocus.requestFocus();
+        },
         validator: (text) {
           if (text == null || text.length < 3) {
             return 'Invalid password';
@@ -97,6 +123,10 @@ class RegisterPage extends StatelessWidget {
         label: 'Confirm Password',
         itsPassword: true,
         controller: _passwordConfirmationController,
+        focusNode: _passwordConfirmationFocus,
+        onFieldSubmitted: (_) {
+          _referalCodeFocus.requestFocus();
+        },
         validator: (text) {
           if (text == null || text.length < 3) {
             return 'Invalid password';
@@ -109,6 +139,7 @@ class RegisterPage extends StatelessWidget {
       TextInputFormWidget(
         label: 'Referal Code (Optional)',
         controller: _referalCodeController,
+        focusNode: _referalCodeFocus,
       ),
       SizedBox(
         height: 24,
@@ -155,34 +186,27 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.grey,
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TitlePageWidget(label: 'Register'),
-                  SizedBox(height: 48),
-                  ...buildInputsForm(),
-                  ButtonWidget(
-                    onTap: () {
-                      bool isValid = _formKey.currentState?.validate() ?? false;
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TitlePageWidget(label: 'Register'),
+                SizedBox(height: 48),
+                ...buildInputsForm(),
+                ButtonWidget(
+                  onTap: () {
+                    bool isValid = _formKey.currentState?.validate() ?? false;
 
-                      if (isValid) _register(context);
-                    },
-                    title: 'Register',
-                  )
-                ],
-              ),
+                    if (isValid) _register(context);
+                  },
+                  title: 'Register',
+                )
+              ],
             ),
           ),
         ),

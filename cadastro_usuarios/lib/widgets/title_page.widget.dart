@@ -9,7 +9,7 @@ class TitlePageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: TextStyle(fontSize: 34, fontStyle: FontStyle.italic),
+      style: Theme.of(context).textTheme.headline4,
     );
   }
 }

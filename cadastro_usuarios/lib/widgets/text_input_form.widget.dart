@@ -10,6 +10,8 @@ class TextInputFormWidget extends StatefulWidget {
   final String? initialValue;
   final int? maxLength;
   final TextAlign? textAlign;
+  final FocusNode? focusNode;
+  final Function(String)? onFieldSubmitted;
 
   const TextInputFormWidget({
     Key? key,
@@ -21,6 +23,8 @@ class TextInputFormWidget extends StatefulWidget {
     this.initialValue,
     this.maxLength,
     this.textAlign,
+    this.focusNode,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -35,13 +39,16 @@ class _TextInputFormWidgetState extends State<TextInputFormWidget> {
     return TextFormField(
       obscureText: widget.itsPassword ? _isHiddenPass : false,
       controller: widget.controller,
+      focusNode: widget.focusNode,
       validator: widget.validator,
+      onFieldSubmitted: widget.onFieldSubmitted,
       inputFormatters: widget.maxLength != null
           ? [LengthLimitingTextInputFormatter(widget.maxLength)]
           : null,
       textAlign: widget.textAlign ?? TextAlign.left,
       decoration: InputDecoration(
-        hintText: widget.label,
+        labelText: widget.label,
+        labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
         suffixIcon: widget.itsPassword
             ? GestureDetector(
                 onTap: () {
